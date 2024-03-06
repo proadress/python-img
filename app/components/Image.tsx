@@ -1,6 +1,7 @@
 'use client'
 
 
+import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 
 export const DataImage: React.FC<{ link: string }> = ({ link }) => {
@@ -58,9 +59,9 @@ export const ImageUploader: React.FC = () => {
     return (
         <div>
             <input className="file-input file-input-bordered file-input-primary w-full max-w-xs" type="file" accept="image/*" onChange={handleImageChange} />
-            {oriImage && <img className="h-72" src={oriImage} alt="Original Image" />}
+            {oriImage && <Image width={500} height={500} src={oriImage} alt="Original Image" />}
             <button className="btn btn-primary" onClick={handleUpload}>Upload and Process</button>
-            {resImage && <img className="h-72" src={resImage} alt="Modified Image" />}
+            {resImage && <Image width={500} height={500} src={resImage} alt="Modified Image" />}
         </div>
     );
 };

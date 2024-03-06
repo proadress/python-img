@@ -13,14 +13,14 @@ async def a(file: UploadFile = File(...)):
     return Response(content=img_bytes, media_type="image/jpeg")
 
 
-@api.get("/image/original")
-async def linelink():
-    img = cv2.imread("api/image2.jpg")
-    img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
+# @api.get("/image/original")
+# async def linelink():
+#     img = cv2.imread("api/image2.jpg")
+#     img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
 
-    ret, img_encoded = cv2.imencode(".jpg", img)
-    img_bytes = img_encoded.tobytes()
-    return Response(content=img_bytes, media_type="image/jpeg")
+#     ret, img_encoded = cv2.imencode(".jpg", img)
+#     img_bytes = img_encoded.tobytes()
+#     return Response(content=img_bytes, media_type="image/jpeg")
 
 
 # @api.post("/upload")
