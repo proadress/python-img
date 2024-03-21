@@ -61,7 +61,7 @@ const ImageUploader: React.FC = () => {
                 <div>
                     {resImages.map((coordinates, index) => (
                         <div key={index}>
-                            <ul >picture{index + 1}:{coordinates.map((point, idx) => ("[" + point.toString() + "]"))}</ul>
+                            <ul >{selectedImages[index].name}:{coordinates.map((point, idx) => ("[" + point.toString() + "]"))}</ul>
                         </div>
                     ))}
                 </div>

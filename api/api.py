@@ -26,14 +26,10 @@ async def a(file: UploadFile = File(...)):
 async def upload(files: List[UploadFile] = File(...)):
     images = []
     for file in files:
-        request_object_content = await file.read()
+        request_object_content:Image = await file.read()
         img_bytes = imgVertices(request_object_content)
-
         images.append(img_bytes)
     print(images)
-
-    # return JSONResponse(images)
-    data = [[], [[390, 422], [480, 309]]]  # 你的数据
     return str(images)
 
 
