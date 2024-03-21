@@ -58,7 +58,7 @@ export const ImageUploader: React.FC = () => {
 
     return (
         <div>
-            <input className="file-input file-input-bordered file-input-primary w-full max-w-xs" type="file" accept="image/*" onChange={handleImageChange} />
+            <input className="file-input file-input-bordered file-input-primary w-full max-w-xs" type="file" accept="image/*"  onChange={handleImageChange} />
             {oriImage && <Image width={500} height={500} src={oriImage} alt="Original Image" />}
             <button className="btn btn-primary" onClick={handleUpload}>Upload and Process</button>
             {resImage && <Image width={500} height={500} src={resImage} alt="Modified Image" />}

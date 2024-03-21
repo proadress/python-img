@@ -1,8 +1,17 @@
-import cv2
+from typing import List
 from fastapi import APIRouter, File, Response, UploadFile
-from .reddot import imgPreset
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from .reddot import imgPreset, imgVertices
 
 api = APIRouter(prefix="/api", tags=["api"])
+
+
+class Image(BaseModel):
+    filename: str
+    content_type: str
+    contents: bytes
 
 
 @api.post("/image/res")
@@ -11,6 +20,21 @@ async def a(file: UploadFile = File(...)):
     img_bytes = imgPreset(request_object_content)
     # 返回图像的 Response 对象，设置正确的 Content-Type
     return Response(content=img_bytes, media_type="image/jpeg")
+
+
+@api.post("/image/mul")
+async def upload(files: List[UploadFile] = File(...)):
+    images = []
+    for file in files:
+        request_object_content = await file.read()
+        img_bytes = imgVertices(request_object_content)
+
+        images.append(img_bytes)
+    print(images)
+
+    # return JSONResponse(images)
+    data = [[], [[390, 422], [480, 309]]]  # 你的数据
+    return str(images)
 
 
 # @api.get("/image/original")
