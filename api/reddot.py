@@ -29,7 +29,7 @@ def imgPreset(img_bytes):
         area = cv2.contourArea(cnt)
         # print(cv2.arcLength(cnt, True))
         peri = cv2.arcLength(cnt, True)
-        vertices = cv2.approxPolyDP(cnt, peri * 0.1, True)
+        vertices = cv2.approxPolyDP(cnt, peri * 0.05, True)
         # print(vertices)
         vertices = [list(v[0]) for v in vertices]
         vertices = sorted(vertices, key=lambda x: x[1])
