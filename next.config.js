@@ -12,9 +12,9 @@ const nextConfig = {
       {
         source: "/docs",
         destination:
-          process.env.NODE_ENV === "development"?
-          "http://127.0.0.1:8000/docs"
-        : "/api/docs",
+          process.env.NODE_ENV === "development" ?
+            "http://127.0.0.1:8000/docs"
+            : "/api/docs",
       },
       {
         source: "/openapi.json",
@@ -25,13 +25,19 @@ const nextConfig = {
       },
     ];
   },
-
   logging: {
     fetches: {
       fullUrl: true
     }
-  }
-
+  },
+  experimental: {
+    outputFileTracingExcludes: {
+      '/api/': [
+        './node_modules/@next/swc-linux-x64-musl/**/*',
+        './node_modules/@next/swc-linux-x64-gnu/**/*',
+      ],
+    },
+  },
 };
 
 module.exports = nextConfig;
