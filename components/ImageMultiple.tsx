@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 
 
-const ImageUploader: React.FC = () => {
+export const ImageUploader: React.FC<{ link: string }> = ({ link }) => {
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const [oriImages, setOriImages] = useState<string[]>([]);
     const [resImages, setResImages] = useState<number[][][]>([]);
@@ -42,7 +42,7 @@ const ImageUploader: React.FC = () => {
                 formData.append('files', image);
             });
 
-            const response = await fetch('/api/image/mul', {
+            const response = await fetch(link, {
                 method: 'POST',
                 body: formData
             });
@@ -69,6 +69,3 @@ const ImageUploader: React.FC = () => {
         </div>
     );
 };
-
-
-export default ImageUploader;
