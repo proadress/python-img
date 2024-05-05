@@ -1,5 +1,9 @@
 export const imageFetch = async (selectedImage: File | null, link: string) => {
-    if (selectedImage) {
+    try {
+        if (!selectedImage) {
+            throw new Error("No selected image provided");
+        }
+
         const formData = new FormData();
         formData.append('file', selectedImage);
 
@@ -7,7 +11,14 @@ export const imageFetch = async (selectedImage: File | null, link: string) => {
             method: 'POST',
             body: formData
         });
-        return response
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch image: ${response.statusText}`);
+        }
+
+        return response;
+    } catch (error) {
+        console.error("Error fetching image:", error);
+        return null;
     }
-    return null;
 };

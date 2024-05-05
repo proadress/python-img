@@ -23,13 +23,11 @@ export const ImageUploader: React.FC<{ link: string }> = ({ link }) => {
         }
     };
 
-    const handleUpload = async (selectedImage: File | null) => {
+    const handleUpload = async (selectedImage: File | null) => {        
         const response = await imageFetch(selectedImage, link);
-        if (!response) { console.error("no response from"); return }
+        if (!response) { console.log("no response from"); return }
         console.log(123);
-
         console.log(response);
-
         setResImage(await response.json());
     }
 
