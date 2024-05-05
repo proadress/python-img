@@ -1,6 +1,7 @@
 import { ImageUploader } from "@/app/car/single/Image";
 
 const Home = async () => {
+    // const test = await (await fetch("/api/test")).json();
     return (
         <div>
             <div className='flex justify-center'>

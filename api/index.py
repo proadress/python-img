@@ -14,3 +14,8 @@ app.add_middleware(
 )
 app.include_router(xray, prefix="/api/xray", tags=["xray"])
 app.include_router(car, prefix="/api/car", tags=["car"])
+
+
+@app.get("/api/test")
+def test_():
+    return "test"
