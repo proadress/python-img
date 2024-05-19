@@ -57,18 +57,19 @@ class sensorData(BaseModel):
 @app.post("/api/sensorData")
 async def home(data :sensorData):
     print(data.ID,data.Distance)
-    if(db.coll.find({"id":data.ID})):
+    if(db.coll.find_one({"id":data.ID})):
         res = db.coll.replace_one({"id": data.ID}, {"id": data.ID, "dis": data.Distance})
         print("replace" , res)
     else:
         res = db.coll.insert_one({"id":data.ID,"dis":data.Distance})
-    print(res)
-    return "success"
+    data:dict = db.coll.find_one({"id": data.ID})
+    data.pop("_id", None)
+    return data
 
 @app.get("/api/db/sensorData")
 async def home():
     # Use json_util.dumps() to handle ObjectId serialization
-    data:dict = db.coll.find_one({"id": 0})
+    data:dict = db.coll.find_one({"id": 1})
     data.pop("_id", None)
     print(data)
     return data
