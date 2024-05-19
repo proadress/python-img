@@ -1,3 +1,4 @@
+import { GetData } from "@/components/getdata";
 import { Menu } from "./menu";
 
 const Home = async () => {
@@ -5,6 +6,7 @@ const Home = async () => {
     <div>
       <div className='flex justify-center items-center h-screen space-x-4'>
         <Menu />
+        <GetData/>
       </div>
     </div>
   );

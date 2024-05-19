@@ -1,19 +1,15 @@
-from typing import List
-from fastapi import FastAPI, File, Response, UploadFile
+from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-import os
 from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
 
-MONGO_URI = os.getenv("MONGO_URI")
-print(MONGO_URI)
-if not MONGO_URI:
-    MONGO_URI = "mongodb+srv://yc359032:jYW7xwHcvGiQDqCp@cluster0.8lnefaq.mongodb.net/?retryWrites=true&w=majority"
+
+MONGO_URI = "mongodb+srv://yc359032:jYW7xwHcvGiQDqCp@cluster0.8lnefaq.mongodb.net/?retryWrites=true&w=majority"
 
 
 class MongoServer:
@@ -30,7 +26,7 @@ class MongoServer:
 
 
 db = MongoServer(
-    dbname="iot",
+    dbname="iotclass",
     dbcoll="sensordata",
 )
 
@@ -49,7 +45,7 @@ app.add_middleware(
 async def home():
     return RedirectResponse("/docs")
 
-@app.get("/data")
+@app.get("/api/data")
 async def home():
     return "dhjij"
 
@@ -58,18 +54,24 @@ class sensorData(BaseModel):
     ID:int
     Distance:float
 
-@app.post("/sensorData")
+@app.post("/api/sensorData")
 async def home(data :sensorData):
     print(data.ID,data.Distance)
-    if(db.coll.find({"_id":data.ID})):
-        db.coll.replace_one({"_id": data.ID}, {"_id": data.ID, "dis": data.Distance})
+    if(db.coll.find({"id":data.ID})):
+        res = db.coll.replace_one({"id": data.ID}, {"id": data.ID, "dis": data.Distance})
+        print("replace" , res)
     else:
-        db.coll.insert_one({"_id":data.ID,"dis":data.Distance})
+        res = db.coll.insert_one({"id":data.ID,"dis":data.Distance})
+    print(res)
     return "success"
 
-@app.get("/db/sensorData")
-async def home(id:int):
-    return db.coll.find_one({"_id":id})
+@app.get("/api/db/sensorData")
+async def home():
+    # Use json_util.dumps() to handle ObjectId serialization
+    data:dict = db.coll.find_one({"id": 0})
+    data.pop("_id", None)
+    print(data)
+    return data
 
 # @app.post("/api/car/image/res")
 # async def a(file: UploadFile = File(...)):
