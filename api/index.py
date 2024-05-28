@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from fastapi.responses import RedirectResponse
+from fastapi import FastAPI, HTTPException, Path
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -31,8 +31,6 @@ db = MongoServer(
 )
 
 
-
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -41,9 +39,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def home():
     return RedirectResponse("/docs")
+
 
 @app.get("/api/data")
 async def home():
@@ -51,28 +51,35 @@ async def home():
 
 
 class sensorData(BaseModel):
-    ID:int
-    Distance:float
+    ID: int
+    Distance: float
+
 
 @app.post("/api/sensorData")
-async def home(data :sensorData):
-    print(data.ID,data.Distance)
-    if(db.coll.find_one({"id":data.ID})):
-        res = db.coll.replace_one({"id": data.ID}, {"id": data.ID, "dis": data.Distance})
-        print("replace" , res)
+async def home(data: sensorData):
+    print(data.ID, data.Distance)
+    if db.coll.find_one({"id": data.ID}):
+        res = db.coll.replace_one(
+            {"id": data.ID}, {"id": data.ID, "dis": data.Distance}
+        )
+        print("replace", res)
     else:
-        res = db.coll.insert_one({"id":data.ID,"dis":data.Distance})
-    data:dict = db.coll.find_one({"id": data.ID})
+        res = db.coll.insert_one({"id": data.ID, "dis": data.Distance})
+    data: dict = db.coll.find_one({"id": data.ID})
     data.pop("_id", None)
     return data
 
-@app.get("/api/db/sensorData")
-async def home():
-    # Use json_util.dumps() to handle ObjectId serialization
-    data:dict = db.coll.find_one({"id": 1})
-    data.pop("_id", None)
-    print(data)
-    return data
+
+@app.get("/api/db/sensorData/{id}")
+async def get_sensor_data(id: int = Path(..., title="The ID of the sensor data")):
+    try:
+        data: dict = db.coll.find_one({"id": id})
+        data.pop("_id", None)
+        print(data)
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 
 # @app.post("/api/car/image/res")
 # async def a(file: UploadFile = File(...)):
@@ -104,5 +111,3 @@ async def home():
 #         images.append(img_bytes)
 #     print(images)
 #     return str(images)
-
-
