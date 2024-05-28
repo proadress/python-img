@@ -16,7 +16,7 @@ export const BusSit = ({ sitid }: { sitid: number }) => {
     }, []);
 
     const fetchAllSeatStatus = async () => {
-        const res = await fetch("http://localhost:3000/api/db/sensorData/" + sitid);
+        const res = await fetch("https://python-img.vercel.app/api/db/sensorData/" + sitid);
         if (!res.ok) {
             return <div className="w-12 h-12 border-2"></div>
         }
